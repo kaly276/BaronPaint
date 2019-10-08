@@ -14,7 +14,7 @@ public:
 	static CString sWindowName;
 	static void RegisterClass();
 
-	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point); 
 
 	void undo();
 	void clear();

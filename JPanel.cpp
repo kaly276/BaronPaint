@@ -4,11 +4,10 @@
 #include "stdafx.h"
 #include "BaronPong.h"
 #include "JPanel.h"
-#include "BaronPongDlg.h"
 #include "Sprite.h"
-#include "GameObject.h"
-#include "RectObject.h"
-#include "CircObject.h"
+#include "Rect.h"
+#include "BaronPongDlg.h"
+#include "Eclipse.h"
 
 
 // JPanel
@@ -45,42 +44,49 @@ END_MESSAGE_MAP()
 // A click upon us!  Execute this code and be merry.
 void JPanel::OnLButtonDown(UINT nFlags, CPoint point)
 {
+	
 	CBaronPongDlg *tDialog = (CBaronPongDlg*)AfxGetMainWnd();
 	
-	// Create object where click.
 	float x = point.x;
 	float y = point.y;
+	GameObject* shape;
 
-	GameObject* obj;
-	
-
-	if (tDialog->getShape() == "Circle") {
-		obj = new CircObject(x, y);
+	if (tDialog->getTypeToDraw() == "Rect")
+	{
+		shape = new Rect(x, y);
 	}
-	else {
-		obj = new RectObject(x, y);
+	else
+	{
+		shape = new Eclipse(x, y);
 	}
 
-
-
-
-
-
-	if (tDialog->getFilled() == true) {
-		obj->setFilled(true);
+	if (tDialog->getFilled())
+	{
+		shape->setFill(true);
 	}
-	else {
-		obj->setFilled(false);
+	else
+	{
+		shape->setFill(false);
 	}
-	
-	
-	
-	Sprite* sprite = new Sprite(obj);
+	shape->setXScale(tDialog->getWidth());
+	shape->setYScale(tDialog->getHeight());
+	shape->setColor(tDialog->getColor());
+	Sprite* sprite = new Sprite(shape);
+
 	this->mAllSprites.push_back(sprite);
+}
 
+void JPanel::undo()
+{
+	mAllSprites.pop_back();
+}
 
-	CWnd::OnLButtonDown(nFlags, point);
-
+void JPanel::clear()
+{
+	while (!mAllSprites.empty())
+	{
+		mAllSprites.pop_back();
+	}
 }
 
 // JPanel message handlers
@@ -96,34 +102,21 @@ void JPanel::OnPaint()
 					   // Do not call CWnd::OnPaint() for painting messages
 
 	// This code here is just to show you where the JPanel is.  Makes it blue.
-	CBrush brush(RGB(255, 255, 255));
-	CBrush* pOldBrush = dc.SelectObject(&brush);
+	CBrush brushWhite(RGB(255, 255, 255));
+	CBrush* pOldBrush = dc.SelectObject(&brushWhite);
 
 	CRect rect;
 	GetClientRect(rect);
-	dc.Rectangle(rect); //BLUE RECTANGLE IN BACKGROUND
+	dc.Rectangle(rect);
 
 	dc.SelectObject(pOldBrush);
 
 	// Ask our dialog for the current interpolation percentage (if doing interploation)
 	// Loop through all of our sprites and tell them to draw by passing the dc in..
-
-	//dc.Rectangle(0, 0, 40, 20); //WHITE SMALL RECTANGLE
-	//std::list<Sprite*> mAllSprites;
-
-	for (std::list<Sprite*>::iterator it1 = mAllSprites.begin(); it1 != mAllSprites.end(); ++it1) {
-		Sprite* sprite = *it1;
-		sprite->Draw(dc);
-	}
-
-}
-
-void JPanel::undo() {
-	mAllSprites.pop_back();
-}
-
-void JPanel::clear() {
-	while (!mAllSprites.empty()) {
-		mAllSprites.pop_back();
+	for (std::list<Sprite*>::iterator sprite = mAllSprites.begin(); sprite != mAllSprites.end(); ++sprite) 
+	{
+		Sprite* current = *sprite;
+		current->Draw(dc);
 	}
 }
+

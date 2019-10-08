@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
-
-class GameObject 
+class GameObject
 {
 public:
 	GameObject();
@@ -10,39 +9,42 @@ public:
 
 	void Update(double tDeltaTime);
 
-
-	float getXPosition();
-	float getYPosition();
+	void setPosition(float x, float y);
 	
-	float getFinalXPosition();
-	float getFinalYPosition();
+	void setXScale(int xScale);
+	void setYScale(int yScale);
 
 	void setShape(std::string shape);
-	virtual std::string getShape() = 0;
 
+	void setFill(bool isFill);
+
+	void setColor(COLORREF color);
+
+	float getXPosition() const;
+	float getYPosition() const;
+	float getFinalXPosition() const;
+	float getFinalYPosition() const;
 	
-	void setFilled(bool isFilled);
-	bool getFilled();
+	std::string getShape() const;
 
-	
+	bool getFill() const;
 
-	bool cIsFilled;
+	COLORREF getColor() const;
 private:
-	std::string cShape;
-	
-	
-	COLORREF cColor = RGB(0, 0, 0);
 
 	float mXPosition = 0;
 	float mYPosition = 0;
 
-	float finalXPosition;
-	float finalYPosition;
+	float mFinalXPosition = 0;
+	float mFinalYPosition = 0;
 
-	float mXVelocity = 0;
-	float mYVelocity = 0;
+	std::string mShape;
 
-	float mXAcceleration = 0;
-	float mYAcceleration = 0;
+	int mXScale = 100;
+	int mYScale = 100;
+
+	bool isFilled = true;
+
+	COLORREF mColor = RGB(0, 0, 0);
 };
 

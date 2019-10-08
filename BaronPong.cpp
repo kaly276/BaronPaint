@@ -6,11 +6,8 @@
 #include "BaronPong.h"
 #include "BaronPongDlg.h"
 #include "Logic.h"
-#include "afxwin.h"
 #include <time.h>
 #include <algorithm>
-#include "GameObject.h"
-#include "Sprite.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

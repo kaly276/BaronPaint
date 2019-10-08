@@ -17,7 +17,11 @@ public:
 	void Draw(double tInterpolation);
 	double mInterpolation = 0;
 
-	//afx_msg void OnPaint();
+	std::string getTypeToDraw() const;
+	bool getFilled() const;
+	COLORREF getColor() const;
+	int getWidth() const;
+	int getHeight() const;
 // Dialog Data
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_BARONPONG_DIALOG };
@@ -37,16 +41,26 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 
+	std::string typeToDraw = "Rect";
 	bool isFilled = true;
-	std::string shape = "Rectangle";
+	int width = 100;
+	int height = 100;
+	int red = 0;
+	int green = 0;
+	int blue = 0;
+	CSliderCtrl widthCtrl;
+	CSliderCtrl heightCtrl;
 
+	CSliderCtrl redCtrl;
+	CSliderCtrl greenCtrl;
+	CSliderCtrl blueCtrl;
+
+	CBrush mBrush;
 public:
-	afx_msg void OnBnClickedButton1();
-	
-	bool getFilled();
-
-	std::string getShape();
-	afx_msg void OnBnClickedButton2();
-	afx_msg void OnBnClickedButtonClear();
-	afx_msg void OnBnClickedButtonUndo();
+	afx_msg void OnBnClickedFill();
+	afx_msg void OnBnClickedType();
+	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+	afx_msg void OnBnClickedUndo();
+	afx_msg void OnBnClickedClear();
+	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 };

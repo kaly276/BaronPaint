@@ -1,50 +1,40 @@
 #include "stdafx.h"
-#include "afxwin.h"
 #include "Sprite.h"
 #include "GameObject.h"
-#include <list>
 
-void Sprite::Draw(CPaintDC &tContext) {
-	// Just look at our object and draw something to the DC
-	// Now we have address of Jpanel dc.
-
+void Sprite::Draw(CPaintDC &tContext)
+{
 	CRect rect(mMyObject->getXPosition(), mMyObject->getYPosition(), mMyObject->getFinalXPosition(), mMyObject->getFinalYPosition());
-	CBrush brush(RGB(0, 0, 0));
-
-	if (mMyObject->getFilled() == true) {
-			CBrush* pOldBrush = tContext.SelectObject(&brush);
-		
+	COLORREF color = mMyObject->getColor();
+	CBrush brush(color);
+	CPen penBlack(PS_SOLID, 0, color);
+	CPen* pOldPen = tContext.SelectObject(&penBlack);
+	
+	if (mMyObject->getFill())
+	{
+		CBrush* pOldBrush = tContext.SelectObject(&brush);
 	}
-	else {
-			tContext.SelectStockObject(NULL_BRUSH);
+	else
+	{
+		tContext.SelectStockObject(NULL_BRUSH);
 	}
 	
-
-	if (mMyObject->getShape() == "Circle") {
-		tContext.Ellipse(rect);
-	}
-	else {
+	if (mMyObject->getShape() == "Rect")
+	{
 		tContext.Rectangle(rect);
 	}
-	
-	
+	else
+	{
+		tContext.Ellipse(rect);
+	}
 
 }
-
-void Sprite::setFilled(bool isFilled) {
-	cIsFilled = isFilled;
-}
-
 
 Sprite::Sprite(GameObject *tObjectToDraw)
 {
 	mMyObject = tObjectToDraw;
-	
 }
 
-Sprite::Sprite() {
-
-}
 
 Sprite::~Sprite()
 {
